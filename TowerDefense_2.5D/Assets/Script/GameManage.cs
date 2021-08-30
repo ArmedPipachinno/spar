@@ -69,21 +69,25 @@ public class GameManage : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameManage.currentGameUI == GameManage.GameUI.createTowerUI)
-            {
-                GameManage.currentGameUI = GameManage.GameUI.playing;
-            }
-            else if (GameManage.currentGameUI == GameManage.GameUI.pause)
-            {
-                GameManage.currentGameUI = GameManage.GameUI.playing;
-            }
-            else
-            {
-                GameManage.currentGameUI = GameManage.GameUI.pause;
-            }
+            Close();
         }
     }
 
+    public void Close()
+    {
+        if (GameManage.currentGameUI == GameManage.GameUI.createTowerUI)
+        {
+            GameManage.currentGameUI = GameManage.GameUI.playing;
+        }
+        else if (GameManage.currentGameUI == GameManage.GameUI.pause)
+        {
+            GameManage.currentGameUI = GameManage.GameUI.playing;
+        }
+        else
+        {
+            GameManage.currentGameUI = GameManage.GameUI.pause;
+        }
+    }
 
     /* UI Script */
     // Money

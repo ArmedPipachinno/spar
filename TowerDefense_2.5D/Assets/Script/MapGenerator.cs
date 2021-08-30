@@ -6,60 +6,64 @@ using System.Linq;
 
 public class MapGenerator : MonoBehaviour
 {
-    // Keep Type of Platform (Should be Prefabs)
-    [SerializeField] private GameObject[] platform;
-
     [SerializeField] private Transform cameraPos;
-    [SerializeField] private TextAsset mapText;
-    
-    // Keep MapData that read from text
-    private string[] mapData;
 
     // For Checking that this grid has tower or not
     public static bool[,] mapCheck;
+    private GameObject[,] mapData;
 
-    private int width, height;
-
-    [SerializeField] private GameObject spawn;
-    [SerializeField] private Vector2 spawnPos;
+    private int width;
+    private int height;
 
 
     private void Start()
     {
-        GenerateGrid();
         // Set size of 2D Array
-        mapCheck = new bool[width, height];
-    }
-
-    private string[] ReadText()
-    {
-        // Read Text and Split in form of String Array
-        return mapText.text.Split('\n');
+        GenerateGrid();
+        //Check();
     }
 
     private void GenerateGrid()
     {
-        mapData = ReadText();
+        GameObject[] checkMapGrid;
 
-        height = mapData.Count();
-        width = mapData[0].Length;
+        checkMapGrid = GameObject.FindGameObjectsWithTag("Platform");
 
-        for (int y = 0; y < height; y++)
+        for (int j = 0; j < checkMapGrid.Length; j++)
         {
-            for (int x = 0; x < width-1; x++)
-            {
-                // Find Index(Type of Tiles)
-                int index = mapData[y][x] - '0';
-                // Create Type of Tiles
-                var spawnPlatform = Instantiate(platform[index], new Vector3(x, -y, 0), Quaternion.identity);
-                //platform[index].name = $"Platform {x} {y}";
-            }
+            int x = Mathf.Abs((int)checkMapGrid[j].transform.position.x);
+            int y = Mathf.Abs((int)checkMapGrid[j].transform.position.y);
+            width = (width < x) ? x : width;
+            height = (height < y) ? y : height;
         }
 
-        // Create Portal for Spawn Enemies
-        Instantiate(spawn, new Vector3(spawnPos.x, -spawnPos.y, -1), Quaternion.identity);
+        mapData = new GameObject[width+1, height+1];
+        mapCheck = new bool[width+1, height+1];
 
-        // Change CameraPosition Depend of Size of Map
-        cameraPos.transform.position = new Vector3((float)width / 2 - 0.5f, (float)-height / 2 - 0.5f, -10.0f);
+        for (int j = 0; j < checkMapGrid.Length; j++)
+        {
+            int x = Mathf.Abs((int)checkMapGrid[j].transform.position.x);
+            int y = Mathf.Abs((int)checkMapGrid[j].transform.position.y);
+            mapData[x,y] = checkMapGrid[j];
+        }
+        cameraPos.transform.position = new Vector3(width / 2.0f, -height / 2.0f, -10.0f);
+    }
+
+    private void Check()
+    {
+        print(width + " " + height);
+        for(int j=0;j<=width;j++)
+        {
+            for(int k=0;k<=height;k++)
+            {
+                print(j + " " + k + "  " + mapData[j,k]);
+            }
+        }
+    }
+
+
+    public Vector2 GetMapSize()
+    {
+        return new Vector2(width, height);
     }
 }

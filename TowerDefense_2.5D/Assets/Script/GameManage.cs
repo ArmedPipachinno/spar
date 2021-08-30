@@ -19,6 +19,8 @@ public class GameManage : MonoBehaviour
     // OtherUI which run while playing
     [SerializeField] private Text moneyUI;
     private int money;
+    [SerializeField] private Text healthUI;
+    [SerializeField] private int health;
 
     public enum GameUI
     {
@@ -36,8 +38,9 @@ public class GameManage : MonoBehaviour
         CheckEscButton();
         CheckUI();
         ShowMoney();
+        ShowHealth();
 
-        if(Input.GetKey(KeyCode.M))
+        if (Input.GetKey(KeyCode.M))
         {
             money += 10;
         }
@@ -70,7 +73,7 @@ public class GameManage : MonoBehaviour
             {
                 GameManage.currentGameUI = GameManage.GameUI.playing;
             }
-            else if(GameManage.currentGameUI == GameManage.GameUI.pause)
+            else if (GameManage.currentGameUI == GameManage.GameUI.pause)
             {
                 GameManage.currentGameUI = GameManage.GameUI.playing;
             }
@@ -82,10 +85,32 @@ public class GameManage : MonoBehaviour
     }
 
 
-    // UI Script
+    /* UI Script */
+    // Money
     private void ShowMoney()
     {
         moneyUI.text = "$ " + money.ToString();
+    }
+
+    public void AddMoney(int val)
+    {
+        money += val;
+    }
+
+    public int GetMoney()
+    {
+        return money;
+    }
+
+    // Health
+    private void ShowHealth()
+    {
+        healthUI.text = "Health : " + health.ToString();
+    }
+
+    public void AddHealth(int val)
+    {
+        health += val;
     }
 
     private void MoveCanvas()

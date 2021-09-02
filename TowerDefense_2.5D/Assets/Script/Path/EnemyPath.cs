@@ -9,15 +9,12 @@ public class EnemyPath : MonoBehaviour
     [SerializeField] private float waveTime;
     private float timeCount;
 
-    private void Start()
-    {
-        
-    }
-
-
     private void Update()
     {
-        GenerateEnemy();
+        if(GameManage.currentGameStatus != GameManage.GameStatus.PAUSE)
+        {
+            GenerateEnemy();
+        }
     }
 
     private void GenerateEnemy()

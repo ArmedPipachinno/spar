@@ -11,6 +11,7 @@ public class MapGenerator : MonoBehaviour
     // For Checking that this grid has tower or not
     public static bool[,] mapCheck;
     private GameObject[,] mapData;
+    private GameObject[,] towerData;
 
     private int width;
     private int height;
@@ -39,6 +40,7 @@ public class MapGenerator : MonoBehaviour
 
         mapData = new GameObject[width+1, height+1];
         mapCheck = new bool[width+1, height+1];
+        towerData = new GameObject[width + 1, height + 1];
 
         for (int j = 0; j < checkMapGrid.Length; j++)
         {
@@ -65,5 +67,15 @@ public class MapGenerator : MonoBehaviour
     public Vector2 GetMapSize()
     {
         return new Vector2(width, height);
+    }
+
+    public GameObject GetTower(int _xPos,int _yPos)
+    {
+        return towerData[_xPos, _yPos];
+    }
+
+    public void SetTower(int _xPos, int _yPos,GameObject _object)
+    {
+        towerData[_xPos, _yPos] = _object;
     }
 }

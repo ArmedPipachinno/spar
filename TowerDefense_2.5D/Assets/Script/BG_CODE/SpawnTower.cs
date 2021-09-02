@@ -26,9 +26,10 @@ public class SpawnTower : MonoBehaviour
         {
             print("GenTower1");
             Vector2 placePos = GameManage.clickPos;
-            Instantiate(Tower_1, placePos, Quaternion.identity);
-            GameManage.currentGameUI = GameManage.GameUI.playing;
+            GameObject T1 = Instantiate(Tower_1, placePos, Quaternion.identity);
+            GameManage.currentGameStatus = GameManage.GameStatus.PLAY;
             MapGenerator.mapCheck[(int)placePos.x, (int)-placePos.y] = true;
+            GetComponent<MapGenerator>().SetTower((int)placePos.x, (int)-placePos.y, T1);
             gameManageSC.AddMoney(-costTower_1);
         }
     }
@@ -39,9 +40,10 @@ public class SpawnTower : MonoBehaviour
         {
             print("GenTower2");
             Vector2 placePos = GameManage.clickPos;
-            Instantiate(Tower_2, placePos, Quaternion.identity);
-            GameManage.currentGameUI = GameManage.GameUI.playing;
+            GameObject T2 = Instantiate(Tower_2, placePos, Quaternion.identity);
+            GameManage.currentGameStatus = GameManage.GameStatus.PLAY;
             MapGenerator.mapCheck[(int)placePos.x, (int)-placePos.y] = true;
+            GetComponent<MapGenerator>().SetTower((int)placePos.x, (int)-placePos.y, T2);
             gameManageSC.AddMoney(-costTower_2);
         }
     }
@@ -52,10 +54,25 @@ public class SpawnTower : MonoBehaviour
         {
             print("GenTower3");
             Vector2 placePos = GameManage.clickPos;
-            Instantiate(Tower_3, placePos, Quaternion.identity);
-            GameManage.currentGameUI = GameManage.GameUI.playing;
+            GameObject T3 = Instantiate(Tower_3, placePos, Quaternion.identity);
+            GameManage.currentGameStatus = GameManage.GameStatus.PLAY;
             MapGenerator.mapCheck[(int)placePos.x, (int)-placePos.y] = true;
+            GetComponent<MapGenerator>().SetTower((int)placePos.x, (int)-placePos.y, T3);
             gameManageSC.AddMoney(-costTower_3);
         }
+    }
+
+    public void Sell()
+    {
+        int _xPos = (int)GameManage.clickPos.x;
+        int _yPos = (int)GameManage.clickPos.y;
+        Destroy(GetComponent<MapGenerator>().GetTower(_xPos, -_yPos));
+        MapGenerator.mapCheck[_xPos, -_yPos] = false;
+        GameManage.currentGameStatus = GameManage.GameStatus.PLAY;
+    }
+
+    public void Upgrade()
+    {
+
     }
 }

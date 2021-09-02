@@ -19,7 +19,7 @@ public class TileProperties : MonoBehaviour
     private void OnMouseOver()
     {
         // Change Color when Mouse Hover if there is no tower on that grid
-        if (GameManage.currentGameUI == GameManage.GameUI.playing && !MapGenerator.mapCheck[(int)nowPos.x,(int)-nowPos.y])
+        if (GameManage.currentGameStatus == GameManage.GameStatus.PLAY)
         {
             currentRenderer.color = new Color(currentColor.r + 0.1f, currentColor.g + 0.1f, currentColor.b + 0.1f);
         }
@@ -33,12 +33,19 @@ public class TileProperties : MonoBehaviour
     private void OnMouseDown()
     {
         // Mouse Click -> Show createTowerUI if there is no tower on that grid
-        if (GameManage.currentGameUI == GameManage.GameUI.playing && !MapGenerator.mapCheck[(int)nowPos.x, (int)-nowPos.y])
+        if (GameManage.currentGameStatus == GameManage.GameStatus.PLAY)
         {
             Vector3 nowPos = GetComponent<Transform>().position;
             // Track the position that have been clicked
             GameManage.clickPos = nowPos;
-            GameManage.currentGameUI = GameManage.GameUI.createTowerUI;
+            if (MapGenerator.mapCheck[(int)nowPos.x, (int)-nowPos.y])
+            {
+                GameManage.currentGameStatus = GameManage.GameStatus.UPGRADE;
+            }
+            else
+            {
+                GameManage.currentGameStatus = GameManage.GameStatus.CREATE;
+            }
         }
     }
 

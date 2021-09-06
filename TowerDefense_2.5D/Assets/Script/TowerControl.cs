@@ -7,6 +7,7 @@ public class TowerControl : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
 
     [SerializeField] private float range;
+    [SerializeField] private GameObject rangeArea;
     [SerializeField] private float shootDelay;
     private float shootTimeCounter = 0.0f;
     private bool foundEnemy = false;
@@ -16,27 +17,40 @@ public class TowerControl : MonoBehaviour
     private void Start()
     {
         enemyList = new LinkedList<GameObject>();
+        rangeArea.transform.localScale = new Vector2(rangeArea.transform.localScale.x * range * 2, 
+                                                    rangeArea.transform.localScale.y * range * 2);
+        rangeArea.SetActive(false);
     }
 
     private void Update()
     {
-        if(GameManage.currentGameStatus != GameManage.GameStatus.PAUSE && 
+        if (GameManage.currentGameStatus != GameManage.GameStatus.PAUSE &&
             GameManage.currentGameStatus != GameManage.GameStatus.GAMEOVER)
         {
+            // If tower was clicked -> Show RangeArea that can shoot
+            if(GameManage.currentGameStatus == GameManage.GameStatus.UPGRADE &&
+                GameManage.clickPos == transform.position)
+            {
+                rangeArea.SetActive(true);
+            }
+            else
+            {
+                rangeArea.SetActive(false);
+            }
             CheckEnemy();
             CoolDown();
         }
     }
-   
+
     // Cool down for Shooting bullet
     private void CoolDown()
     {
         if (shootTimeCounter >= shootDelay)
         {
-            if(foundEnemy)
+            if (foundEnemy)
             {
-               Shoot();
-               shootTimeCounter = 0;
+                Shoot();
+                shootTimeCounter = 0;
             }
         }
         else
@@ -59,35 +73,37 @@ public class TowerControl : MonoBehaviour
     private void CheckEnemy()
     {
         CheckEnemyDis();
-        Collider2D[] enemyRef = Physics2D.OverlapCircleAll(transform.position, range);
-        foreach (var enemy in enemyRef)
+        // No Enemies / Enemies in range are killed then !! Check OverlapCircle !!
+        if(enemyList.Count == 0)
         {
-            if (enemy.gameObject.CompareTag("Enemy"))
+            Collider2D[] enemyRef = Physics2D.OverlapCircleAll(transform.position, range);
+            foreach (var enemy in enemyRef)
             {
-                foundEnemy = true;
-                if (enemyList.Count == 0 )
+                if (enemy.gameObject.CompareTag("Enemy"))
                 {
                     enemyList.AddLast(enemy.gameObject);
                 }
             }
         }
+        // If there are enemy in list then foundEnemy = true -> prepare to shoot
         foundEnemy = (enemyList.Count > 0) ? true : false;
     }
 
 
-    // If Enemy far from range -> delete from enemyList
-    // If Enemy die -> delete from enemyList
+    // Check Enemy 
     private void CheckEnemyDis()
     {
-        if(enemyList.Count == 0)
+        if (enemyList.Count == 0)
         {
             return;
         }
-        else if(enemyList.First.Value == null)
+        // If Enemy die / Enemy has gone to base then Remove from list
+        else if (enemyList.First.Value == null)
         {
             enemyList.RemoveFirst();
         }
-        else if(Vector2.Distance(enemyList.First.Value.transform.position, transform.position) > range)
+        // If Enemy is out of range then Remove from list
+        else if (Vector2.Distance(enemyList.First.Value.transform.position, transform.position) > range)
         {
             enemyList.RemoveFirst();
         }

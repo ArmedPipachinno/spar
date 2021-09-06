@@ -7,6 +7,7 @@ public class TileProperties : MonoBehaviour
     private SpriteRenderer currentRenderer;
     private Color currentColor;
     private Vector2 nowPos;
+    
 
     private void Start()
     {

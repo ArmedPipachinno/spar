@@ -19,6 +19,7 @@ public class EnemyControl : MonoBehaviour
         if(GameManage.currentGameStatus != GameManage.GameStatus.PAUSE &&
             GameManage.currentGameStatus != GameManage.GameStatus.GAMEOVER)
         {
+            // Walk until there have no path
             if(now<path.Length-1)
             {
                 Walk();

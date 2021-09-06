@@ -23,6 +23,7 @@ public class CameraControl : MonoBehaviour
 
     private void GetInput()
     {
+        /*
         if (Input.GetKey(KeyCode.W))
         {
             mainCamera.transform.Translate(Vector3.up * cameraSpeed * Time.deltaTime);
@@ -38,6 +39,17 @@ public class CameraControl : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             mainCamera.transform.Translate(Vector3.right * cameraSpeed * Time.deltaTime);
+        }
+        */
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            mainCamera.transform.localRotation = Quaternion.Euler(0, 0, mainCamera.transform.localRotation.z - 90);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            mainCamera.transform.localRotation = Quaternion.Euler(0, 0, mainCamera.transform.localRotation.z + 90);
         }
     }
 
